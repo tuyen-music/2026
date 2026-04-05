@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TUYÊN | Indie Artist - Music Creator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0000FF;
+            --secondary: #0000FF;
+            --bg: #F4F4F0;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--primary);
+            scroll-behavior: smooth;
+        }
+        .header-font {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        }
+        .section-fade {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+        .section-fade.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width .3s;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .music-card {
+            border: 1px solid var(--primary);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 400px;
+            text-decoration: none;
+            color: inherit;
+        }
+        .music-card:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-8px);
+        }
+        .press-item {
+            border-bottom: 1px solid rgba(0, 0, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .press-item:hover {
+            padding-left: 20px;
+            border-bottom-color: var(--primary);
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); }
+        
+        /* Thumbnail Player Styles */
+        .media-container {
+            filter: grayscale(1) contrast(1.1);
+            transition: filter 0.5s ease;
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+            background: #000;
+        }
+        .media-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: transform 0.5s ease;
+        }
+        .media-container:hover img {
+            transform: scale(1.05);
+        }
+        .play-button-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        .media-container:hover .play-button-overlay {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: var(--primary);
+            color: white;
+        }
+        .media-container:hover {
+            filter: grayscale(0) contrast(1);
+        }
+        
+        .spotify-container {
+            filter: grayscale(1) contrast(1.2);
+            transition: filter 0.5s ease;
+        }
+        .spotify-container:hover {
+            filter: grayscale(0) contrast(1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Thanh điều hướng -->
+    <nav class="fixed w-full z-50 bg-[#F4F4F0]/90 backdrop-blur-md border-b border-[#0000FF]/10">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="header-font text-2xl tracking-tighter text-[#0000FF]">Tuyên</div>
+            <div class="hidden md:flex space-x-12 text-[10px] font-black tracking-[0.2em] uppercase">
+                <a href="#music" class="nav-link text-[#0000FF]">Âm nhạc</a>
+                <a href="#projects" class="nav-link text-[#0000FF]">Dự án</a>
+                <a href="#press" class="nav-link text-[#0000FF]">Báo chí</a>
+                <a href="#contact" class="nav-link text-[#0000FF]">Liên hệ</a>
+            </div>
+            <div class="md:hidden text-2xl text-[#0000FF]">☰</div>
+        </div>
+    </nav>
+
+    <!-- Hero Section - Căn giữa và tăng khoảng cách -->
+    <header class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20">
+        <div class="max-w-6xl">
+            <!-- Tăng khoảng cách mb-16 giữa tên và mô tả -->
+            <h1 class="header-font text-7xl md:text-[13rem] leading-[0.8] mb-16 tracking-tighter text-[#0000FF]">
+                TUYÊN
+            </h1>
+            
+            <div class="flex flex-col items-center justify-center gap-10">
+                <h2 class="header-font text-sm tracking-[0.4em] text-[#0000FF]/60 font-bold uppercase">Indie Artist - Music Creator</h2>
+                
+                <p class="text-xl text-[#0000FF]/70 max-w-lg leading-relaxed font-medium">
+                    Song hành cùng Âm nhạc để tạo ra những kết nối chân thật nhất.
+                </p>
+                
+                <div class="flex justify-center mt-4">
+                    <a href="#music" class="group flex items-center space-x-3 text-sm font-black uppercase tracking-widest text-[#0000FF]">
+                        <span>Khám phá tác phẩm</span>
+                        <span class="w-10 h-[2px] bg-[#0000FF] group-hover:w-16 transition-all"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section 1: Âm nhạc cá nhân -->
+    <section id="music" class="py-32 px-6 md:px-20 bg-[#0000FF] text-[#F4F4F0]">
+        <div class="max-w-7xl mx-auto">
+            <div class="section-fade mb-20 text-center">
+                <h3 class="header-font text-xs tracking-[0.3em] mb-4 text-[#F4F4F0]/60">01 / Tác phẩm</h3>
+                <h2 class="header-font text-5xl md:text-8xl">Sản phẩm cá nhân</h2>
+            </div>
+
+            <!-- Bài hát tiêu biểu (YouTube) -->
+            <div class="grid md:grid-cols-2 gap-16 items-center section-fade mb-40">
+                <a href="https://www.youtube.com/watch?v=iGzb8Vw8a1g" target="_blank" class="media-container w-full block shadow-2xl">
+                    <img src="https://img.youtube.com/vi/iGzb8Vw8a1g/maxresdefault.jpg" alt="Sài Gòn Tôi Mưa">
+                    <div class="play-button-overlay">
+                        <svg class="w-8 h-8 text-[#0000FF] ml-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.841z"/>
+                        </svg>
+                    </div>
+                </a>
+                
+                <div>
+                    <h4 class="header-font text-4xl mb-6 italic text-[#F4F4F0]">"Sài Gòn Tôi Mưa"</h4>
+                    <p class="text-lg leading-relaxed mb-8 opacity-90">
+                        Bản hit đột phá định hình tên tuổi của Tuyên trong làng nhạc Indie Việt Nam.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex justify-between border-b border-[#F4F4F0]/30 pb-2">
+                            <span class="header-font text-xs">Lượt Stream</span>
+                            <span class="font-bold">8,000,000+</span>
+                        </div>
+                        <div class="flex justify-between border-b border-[#F4F4F0]/30 pb-2">
+                            <span class="header-font text-xs">Thể loại</span>
+                            <span class="font-bold">Indie Pop / Alternative</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EP Mới (Spotify) -->
+            <div class="grid md:grid-cols-2 gap-16 items-center section-fade mb-32">
+                <div class="order-2 md:order-1">
+                    <h4 class="header-font text-4xl mb-6 italic text-[#F4F4F0]">EP "SAVE THIS LOVE"</h4>
+                    <p class="text-lg leading-relaxed mb-8 opacity-90">
+                        Một chương mới đầy táo bạo khi Tuyên chọn dòng nhạc Punk Rock/Alternative Rock để ra mắt EP đầu tiên. "Save This Love" có sự góp mặt của Quán Quân Rap Việt Mùa 2 Seachains cùng Producer Team Tổng Đài vô cùng tài năng.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex justify-between border-b border-[#F4F4F0]/30 pb-2">
+                            <span class="header-font text-xs">Phát hành</span>
+                            <span class="font-bold">2023</span>
+                        </div>
+                        <div class="flex justify-between border-b border-[#F4F4F0]/30 pb-2">
+                            <span class="header-font text-xs">Số lượng</span>
+                            <span class="font-bold">5 bài hát</span>
+                        </div>
+                    </div>
+                    <div class="mt-10 flex flex-wrap gap-4">
+                        <a href="https://open.spotify.com/artist/4joNWs26XgMPKcV4hJ03hr" target="_blank" class="bg-[#F4F4F0] text-[#0000FF] px-8 py-3 header-font text-xs tracking-widest hover:invert transition">Tất cả tác phẩm</a>
+                    </div>
+                </div>
+                
+                <div class="spotify-container w-full order-1 md:order-2">
+                    <iframe 
+                        style="border-radius:12px" 
+                        src="https://open.spotify.com/embed/album/2lbieyF6kBxv2Pi1h54gjR?utm_source=generator&theme=0" 
+                        width="100%" 
+                        height="352" 
+                        frameBorder="0" 
+                        allowfullscreen="" 
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Dự án tiêu biểu -->
+    <section id="projects" class="py-32 px-6 md:px-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="section-fade mb-20 text-center">
+                <h3 class="header-font text-xs tracking-[0.3em] mb-4 text-[#0000FF]/50">02 / Dự án tiêu biểu</h3>
+                <h2 class="header-font text-5xl md:text-8xl text-[#0000FF]">Các dự án khác</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Các music-card giữ nguyên như mã của bạn -->
+                <a href="https://www.youtube.com/@FeelDuShow" target="_blank" class="music-card p-10 section-fade">
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-widest bg-[#0000FF] text-white px-3 py-1 mb-6 inline-block">Nhà sáng lập & Host</span>
+                        <h4 class="header-font text-3xl mb-4">FEEL DU SHOW</h4>
+                        <p class="text-sm font-medium leading-relaxed opacity-80">Chuyến đi mộc mạc, có âm nhạc và chia sẻ trong cả hành trình giúp khán giả hiểu hơn về thế giới của Indie Artist </p>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-widest border-b border-current inline-block w-fit">Kênh Youtube</span>
+                </a>
+
+                <a href="https://www.youtube.com/watch?v=itYhI51Xocw&list=RDitYhI51Xocw&start_radio=1" target="_blank" class="music-card p-10 section-fade" style="transition-delay: 0.1s;">
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-widest bg-[#0000FF] text-white px-3 py-1 mb-6 inline-block">Nhạc phim</span>
+                        <h4 class="header-font text-3xl mb-4">OST MOVIE</h4>
+                        <p class="text-sm font-medium leading-relaxed opacity-80">"Sài Gòn Tôi Mưa" trở thành OST trong bộ phim "Chàng Vợ Của Em" của đạo diễn Charlie Nguyễn</p>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-widest border-b border-current inline-block w-fit">Xem chi tiết</span>
+                </a>
+
+                <a href="https://www.youtube.com/watch?v=rCzDw0ugFqI" target="_blank" class="music-card p-10 section-fade" style="transition-delay: 0.2s;">
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-widest bg-[#0000FF] text-white px-3 py-1 mb-6 inline-block">Quảng cáo</span>
+                        <h4 class="header-font text-3xl mb-4">VIETJET AIR</h4>
+                        <p class="text-sm font-medium leading-relaxed opacity-80">Sáng tác nhạc chủ đề cho chiến dịch "Friday - Friyay", bao gồm biên dịch lời cho 4 ngôn ngữ quốc tế (Ấn, Hàn, Trung, Nhật) cho dự án.</p>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-widest border-b border-current inline-block w-fit">Xem Video</span>
+                </a>
+
+                <a href="https://www.facebook.com/watch/?v=586162296073902" target="_blank" class="music-card p-10 section-fade">
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-widest bg-[#0000FF] text-white px-3 py-1 mb-6 inline-block">Nhạc nhận diện thương hiệu</span>
+                        <h4 class="header-font text-3xl mb-4">BÁCH HÓA XANH</h4>
+                        <p class="text-sm font-medium leading-relaxed opacity-80">Xây dựng âm nhạc quảng bá và nhạc hiệu cho chuỗi bán lẻ Bách Hóa Xanh.</p>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-widest border-b border-current inline-block w-fit">Xem chiến dịch</span>
+                </a>
+
+                <a href="https://www.youtube.com/watch?v=QXykXmzTNOk" target="_blank" class="music-card p-10 section-fade" style="transition-delay: 0.1s;">
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-widest bg-[#0000FF] text-white px-3 py-1 mb-6 inline-block">Nhạc truyền thông</span>
+                        <h4 class="header-font text-3xl mb-4">ĐIỆN MÁY XANH</h4>
+                        <p class="text-sm font-medium leading-relaxed opacity-80">Sản xuất các sản phẩm âm nhạc sáng tạo cho các chiến dịch truyền thông của Điện Máy Xanh.</p>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-widest border-b border-current inline-block w-fit">Xem Video</span>
+                </a>
+
+                <a href="https://www.youtube.com/watch?v=BAyrnyplT7k" target="_blank" class="music-card p-10 section-fade" style="transition-delay: 0.2s;">
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-widest bg-[#0000FF] text-white px-3 py-1 mb-6 inline-block">Nhạc truyền thông</span>
+                        <h4 class="header-font text-3xl mb-4">REDOXON</h4>
+                        <p class="text-sm font-medium leading-relaxed opacity-80">Sản xuất nhạc TVC hiện đại, truyền tải tinh thần đầy sức sống và năng lượng tích cực cho thương hiệu.</p>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-widest border-b border-current inline-block w-fit">Xem TVC</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Báo chí & Truyền thông -->
+    <section id="press" class="py-32 px-6 md:px-20 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="section-fade mb-20 text-center">
+                <h3 class="header-font text-xs tracking-[0.3em] mb-4 text-[#0000FF]/50">03 / Báo chí & Truyền thông</h3>
+                <h2 class="header-font text-5xl md:text-8xl text-[#0000FF]">Góc nhìn báo giới.</h2>
+            </div>
+
+            <div class="space-y-0">
+                <!-- Báo 1 -->
+                <a href="https://phunuvietnam.vn/nu-nghe-si-tre-kim-tuyen-thong-dong-mot-minh-mot-loi-o-dong-nhac-indie-46946.htm" target="_blank" class="press-item flex flex-col md:flex-row md:items-center justify-between py-12 block group">
+                    <div class="mb-4 md:mb-0">
+                        <span class="header-font text-[10px] tracking-widest text-gray-400 block mb-2">Báo Phụ Nữ Việt Nam</span>
+                        <h4 class="header-font text-2xl md:text-4xl text-[#0000FF] group-hover:italic transition-all">"Tuyên: Thong dong một mình một lối ở dòng nhạc Indie"</h4>
+                    </div>
+                    <div class="md:text-right">
+                        <p class="text-sm text-gray-500 max-w-xs md:ml-auto">Chân dung một nữ nghệ sĩ trẻ kiên định với con đường âm nhạc riêng biệt và tự tại.</p>
+                    </div>
+                </a>
+
+                <!-- Báo 2 -->
+                <a href="https://vietnammoi.vn/kim-tuyen-sing-my-song-sau-khi-len-song-nhieu-ban-tre-da-ke-cho-minh-ve-nhung-cau-chuyen-cua-ho-89314.htm" target="_blank" class="press-item flex flex-col md:flex-row md:items-center justify-between py-12 block group">
+                    <div class="mb-4 md:mb-0">
+                        <span class="header-font text-[10px] tracking-widest text-gray-400 block mb-2">Việt Nam Mới</span>
+                        <h4 class="header-font text-2xl md:text-4xl text-[#0000FF] group-hover:italic transition-all">"Sức lan tỏa từ những câu chuyện âm nhạc tại Sing My Song"</h4>
+                    </div>
+                    <div class="md:text-right">
+                        <p class="text-sm text-gray-500 max-w-xs md:ml-auto">Tuyên chia sẻ về sự kết nối kỳ diệu với khán giả sau những màn trình diễn tại Sing My Song.</p>
+                    </div>
+                </a>
+
+                <!-- Báo 3 -->
+                <a href="https://kenh14.vn/roi-khoi-sing-my-song-nguyen-hai-phong-van-trach-moc-4-hlv-cac-vi-thay-em-no-lam-tot-ma-lai-nhu-the-u-20180312143440184.chn" target="_blank" class="press-item flex flex-col md:flex-row md:items-center justify-between py-12 block group border-b-0">
+                    <div class="mb-4 md:mb-0">
+                        <span class="header-font text-[10px] tracking-widest text-gray-400 block mb-2">Kênh 14</span>
+                        <h4 class="header-font text-2xl md:text-4xl text-[#0000FF] group-hover:italic transition-all">"Tiếc nuối từ Nhạc sĩ Nguyễn Hải Phong cho một tài năng âm nhạc thực thụ"</h4>
+                    </div>
+                    <div class="md:text-right">
+                        <p class="text-sm text-gray-500 max-w-xs md:ml-auto">Nhìn lại hành trình đầy ấn tượng và những lời khen ngợi từ nhạc sĩ Nguyễn Hải Phong dành cho Tuyên.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chân trang -->
+    <footer id="contact" class="py-32 px-6 md:px-20 bg-white border-t-4 border-[#0000FF]">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="header-font text-5xl md:text-[8rem] mb-16 tracking-tighter leading-[0.9] text-[#0000FF]">
+                LET'S MAKE NOISE.
+            </h2>
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-16 mb-24 text-left">
+                <div class="border-l-4 border-[#0000FF] pl-6">
+                    <span class="header-font text-[10px] tracking-widest text-[#0000FF]/50 block mb-2">Booking</span>
+                    <a href="mailto:projects.tuyen@mail.com" class="header-font text-2xl text-[#0000FF]">projects.tuyen@mail.com</a>
+                </div>
+                <div class="border-l-4 border-[#0000FF] pl-6">
+                    <span class="header-font text-[10px] tracking-widest text-[#0000FF]/50 block mb-2">Kết nối</span>
+                    <div class="flex space-x-6 text-[10px] font-black uppercase tracking-widest text-[#0000FF]">
+                        <a href="https://open.spotify.com/artist/4joNWs26XgMPKcV4hJ03hr" target="_blank" class="hover:underline">Spotify</a>
+                        <a href="#" class="hover:underline">YouTube</a>
+                    </div>
+                </div>
+            </div>
+            <p class="text-[10px] uppercase tracking-widest text-gray-400 mt-20">© 2026 TUYÊN.</p>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section-fade').forEach(section => observer.observe(section));
+    </script>
+</body>
+</html>
